@@ -18,7 +18,7 @@ def ffmpeg(src_path, dst_path):
     :param dst_path: 输出文件路径
     :return: bool值，转换结果成功or失败
     """
-    command = "ffmpeg -i '{}' -vn -ar 44100 -ac 2 -ab 192 -f mp3 '{}'".format(src_path, dst_path)
+    command = "ffmpeg -i '{}' -vn -ar 44100 -ac 2 -ab 192k -f mp3 '{}'".format(src_path, dst_path)
     try:
         subprocess.check_call(command, shell=True)
         is_success = True
