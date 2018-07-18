@@ -43,8 +43,8 @@ optional arguments:
 python convert.py hello.rmvb
 python convert.py hello.rmvb hello.mp3
 python convert.py /User/video_dir  # videos根目录下有视频文件（忽略次级目录）
-python convert.py /User/video_dir /User/videos_to_mp3_dir  # 产出的mp3文件放在"/User/videos-to-mp3"目录下
-python convert.py /User/video_dir /User/videos_to_mp3_dir --traverse  # videos目录下有视频文件（包含次级目录）
+python convert.py /User/video_dir --output-dir /User/videos_to_mp3_dir  # 产出的mp3文件放在"/User/videos-to-mp3"目录下
+python convert.py /User/video_dir --output-dir /User/videos_to_mp3_dir --traverse  # videos目录下有视频文件（包含次级目录）
 ```
 
 
@@ -75,6 +75,8 @@ ffmpeg -i source_video.avi -vn -ar 44100 -ac 2 -ab 192 -f mp3 dst_audio.mp3
 ## 待改进的功能：
 
 1. 转换时，使用**多进程**；
+2. ~~检测ffmpeg是否安装；~~
+3. 检测支持的文件类型；
 
 
 ## 参考:

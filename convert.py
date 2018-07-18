@@ -13,7 +13,7 @@ from datetime import datetime
 
 def ffmpeg(src_path, dst_path):
     """
-    调用ffmoeg命令，执行转换过程
+    调用ffmpeg命令，执行转换过程
     :param src_path: 输入视频文件路径
     :param dst_path: 输出文件路径
     :return: bool值，转换结果成功or失败
@@ -38,22 +38,33 @@ def convert_dir(dir_path, output_dir, is_traverse=False):
     """
     success_num = 0  # 转换成功的文件数
     fail_num = 0  # 转换失败的文件数
+    file_list = []
+    dir_list = []
     for file_name in os.listdir(dir_path):
         if file_name.startswith("."):
             continue
         file_path = os.path.join(dir_path, file_name)
         if os.path.isfile(file_path):
-            result = convert_file(file_path, output_dir)
-            if result:
-                success_num += 1
-            else:
-                fail_num += 1
-        elif os.path.isdir(file_path) and is_traverse:
-            result = convert_dir(file_path, os.path.join(output_dir, file_name), is_traverse)
-            success_num += result[0]
-            fail_num += result[1]
+            file_list.append(file_path)
+        elif os.path.isdir(file_path):
+            dir_list.append(file_path)
         else:
             print "暂时不支持该路径：{}".format(file_path)
+
+    for file_path in sorted(file_list):
+        print "file_path:", file_path
+        result = convert_file(file_path, output_dir)
+        if result:
+            success_num += 1
+        else:
+            fail_num += 1
+
+    for dir_path in sorted(dir_list):
+        print "dir_path:", dir_path
+        file_name = os.path.basename(dir_path)
+        result = convert_dir(dir_path, os.path.join(output_dir, file_name), is_traverse)
+        success_num += result[0]
+        fail_num += result[1]
 
     return success_num, fail_num
 
@@ -87,6 +98,15 @@ def parse_arg():
 
 def main():
     """主入口"""
+    try:
+        # 检测ffmpeg是否已安装
+        result = subprocess.check_output("ffmpeg -version", shell=True)
+        print "ffmpeg:\n", result
+    except subprocess.CalledProcessError:
+        print "ffmpeg未安装，请先安装:ffmpeg"
+        return
+
+    # 解析输入参数
     command_param = parse_arg()
     file_path = command_param.file_path
     output_dir = command_param.output_dir
