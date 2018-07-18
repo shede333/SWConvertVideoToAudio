@@ -13,12 +13,13 @@ from datetime import datetime
 
 def ffmpeg(src_path, dst_path):
     """
-    调用ffmpeg命令，执行转换过程
+    调用ffmpeg命令，执行转换过程(比特率一般为128kbps、196kbps；要求不高的话，可以使用32kbps，减小体积)
+    注意：比特率的单位为bps
     :param src_path: 输入视频文件路径
     :param dst_path: 输出文件路径
     :return: bool值，转换结果成功or失败
     """
-    command = "ffmpeg -i '{}' -vn -ar 44100 -ac 2 -ab 192k -f mp3 '{}'".format(src_path, dst_path)
+    command = "ffmpeg -i '{}' -vn -ar 44100 -ac 2 -ab 32k -f mp3 '{}'".format(src_path, dst_path)
     try:
         subprocess.check_call(command, shell=True)
         is_success = True
